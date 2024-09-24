@@ -44,11 +44,24 @@ n <- length(y)
 
 ## Question 1
 
-sigma<-sd(y) # Calculate empirical standard deviation
+sgm <-sd(y) # Calculate empirical standard deviation
+
 mu <- mean(y) # calculate empirical mean 
 
+# Assuming y values follow a normal law, we obtain the following confidence interval CI:
+
+CI <- c(qnorm(0.05,mean=mu,sd=sgm),qnorm(0.95,mean=mu,sd=sgm))
+CI
 
 ## Question 2
+
+# Hypothesis H0 is: "Average student IQ is lower or equal than the average IQ score among all the schools int he country."
+# The test is done for an alpha-risk of 5%
+
+alpha<-0.05
+
+# The test statistic is the average.
+CI95 <- c(qnorm(0.025,mean=mu,sd=sgm),qnorm(0.975,mean=mu,sd=sgm))
 
 
 #####################
