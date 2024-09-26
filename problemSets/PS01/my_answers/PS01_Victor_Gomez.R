@@ -77,6 +77,7 @@ test$p.value
 
 # read in expenditure data
 expenditure <- read.table("https://raw.githubusercontent.com/ASDS-TCD/StatsI_Fall2024/main/datasets/expenditure.txt", header=T)
+summary(expenditure)
 
 #Question 1
 #Create pairs plot and save it in a pdf file.
@@ -86,14 +87,27 @@ dev.off()
 
 #Question 2
 
+#Create basic graph
 pdf("regions.pdf")
-plot(expenditure$Region,expenditure$Y)
+plot(expenditure$Region,expenditure$Y,xlab="Region", ylab="Y")
 dev.off()
-###############################################
-#        ADD values
-##############################################        
+
+#Create box plot graph with values        
 pdf("regions_boxplot.pdf")
-boxplot(expenditure$Y ~ expenditure$Region)
+boxplot(expenditure$Y ~ expenditure$Region,xlab="Region", ylab="Y",xaxt = "n")
+axis(1, at=c(1,2,3,4), labels=c("Northeast","North Central","South","West"), las=0)
+# Add data points with jitter for limiting points overlap.
+mylevels <- as.numeric(levels(factor(expenditure$Region)))
+levelProportions <- summary(expenditure$Region)/nrow(expenditure)
+for(i in 1:length(mylevels)){
+  thislevel <- mylevels[i]
+  thisvalues <- expenditure[expenditure$Region==thislevel, "Y"]
+  
+  # take the x-axis indices and add a jitter, proportional to the N in each level
+  myjitter <- jitter(rep(i, length(thisvalues)), amount=levelProportions[i]/2)
+  points(myjitter, thisvalues, pch=1, col=rgb(0,0,0,.9)) 
+  
+}
 dev.off()
 ####################################################
 
@@ -102,7 +116,7 @@ dev.off()
 
 # create scatterplot of Y and X1
 pdf("X1.pdf")
-plot(expenditure$X1, expenditure$Y)
+plot(expenditure$X1, expenditure$Y,xlab="X1", ylab="Y")
 dev.off()
 
 pdf("YX1Region.pdf")
