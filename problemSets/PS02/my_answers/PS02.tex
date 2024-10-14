@@ -122,7 +122,7 @@ Lower           7               7       1
 	where $y_e,i$ is the expected value for a given occurence $i$ , $i \in  |[0;n]|$ \\
 	and $y_o,i$ is the observed value for a given occurence $i$ , $i \in  |[0;n]|$.\\
 
-	where $\forall i \in |[0,n]|,  y_e,i = \frac{raw\_total*column\_total}{grand\_total}$\\
+	where $\forall i \in |[0,n]|,  y_e,i = \frac{raw\_total*column\_total}{grand\_total}$\\ for a given marginal table.
 	
 	So, we calculate the following table.
 	\newpage
@@ -150,6 +150,7 @@ Lower           7               7       1
 
 	In R, that gives :
 	\lstinputlisting[language=R, firstline=19, lastline=42]{PS02_Victor_Gomez_24365129.R}  
+	\newpage
 	i.e. 
 	\begin{verbatim}
 	> chi2
@@ -162,20 +163,20 @@ Lower           7               7       1
 	\item [(b)]
 	Now calculate the p-value from the test statistic you just created (in \texttt{R}).\footnote{Remember frequency should be $>$ 5 for all cells, but let's calculate the p-value here anyway.}  What do you conclude if $\alpha = 0.1$?\\
 	\\
-	For applying a a $\chi^2$ test, we assume that frequencies are $>$5 (even if it is faulse here but the criterion of Cochran is verified i.e. more 80\% of the frequencies are $>5$ ). \\
+	For applying a a $\chi^2$ test, we point out that the size of the studied sample is $>30$. Furthermore, We consider that the criterion that each frequency is $>$5 is verified (even if it is faulse here, but the criterion of Cochran is verified i.e. more 80\% of the frequencies are $>5$, which means that it is still acceptable to apply such a test). \\
 	
-	So we consider the null hypothesis$ \mathcal{H}_0:={"Variables\_ are\_independent."}$	\\
+	So we consider the null hypothesis$ \mathcal{H}_0:=\{"Variables\_ are\_independent."\}$	\\
 
-	So, that leads to an aleatory variable $t \leadsto \chi^2((n_raws-1)(n_columns-1)) = \chi^2(2)$ where $\chi^2$ is the$ \chi^2$ distribution. 
+	So, that leads to an aleatory variable $t \leadsto \chi^2((n_{raws}-1)(n_{columns}-1)) = \chi^2(2)$ where $\chi^2$ is the $ \chi^2$ distribution. 
 	
 	Therefore,  the p-value $p$ is
 
 	\begin{align*}
-		p:&=P(t<T_{\chi^2}|\mathcal{H}_0) 
-		&\approx 0.1502306 &\mbox{ because $t~>\chi^2(2)$ and cf. $\chi^2$ distribution tables. }
+		p:&=P(t<T_{\chi^2}|\mathcal{H}_0) &\mbox{and $T_{\chi^2}\approx 3.79$} \\
+		 &\mbox{ $p\in |[0.1;0.2]|$ because $ F_{\chi^2,2}(0.8)=3.22< T_{\chi^2}< 4.61= F_{\chi^2,2}(0.9)$ }\\
+		&\mbox{where $F_{\chi^2,n}$ is the repartition function of the $\chi^2$ distribution with n degrees of freedom, $n\in IN$ }
 	\end{align*}	
-	
-	In \texttt{R}, that is done with,
+	This can be refine by linear interpolation, but, we can also use \texttt{R},which gives,
 	\lstinputlisting[language=R, firstline=45, lastline=45]{PS02_Victor_Gomez_24365129.R}  
 	
 	\begin{verbatim}
@@ -183,7 +184,7 @@ Lower           7               7       1
 		[1] 0.1502306
 	\end{verbatim}
 
-	So, at risk $\alpha=0.01, \mathcal{H}_0$ is not rejected. ($p>\alpha$).
+	So, at risk $\alpha=0.1, \mathcal{H}_0$ is not rejected. ($p>\alpha$).
 
 	\newpage
 	\item [(c)] Calculate the standardized residuals for each cell and put them in the table below.
@@ -245,6 +246,12 @@ Chattopadhyay and Duflo were interested in whether women promote different polic
 	First, we load data, and then run a linear regression.
 	\lstinputlisting[language=R, firstline=64, lastline=69]{PS02_Victor_Gomez_24365129.R}  
 	
+	\begin{figure}[h!]\centering
+		\caption{\footnotesize Linear regression of Water repair function of Reserved policy }
+		\label{fig:plot_2}
+		\includegraphics[width=.85\textwidth]{lm.pdf}
+	\end{figure}
+
 	In addition, we have the summary:
 	\begin{verbatim}
 	> summary(model)

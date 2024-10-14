@@ -1,69 +1,73 @@
-# Problem Set 2 answers
-# Author: Victor Gomez
-# Due date : 14/10/2024
-
-###########################################
-#         Question 1                      #
-###########################################
-
-#load data (by hand)
-data <- data.frame(
-  not_stopped = c(14,7),
-  bribe_requested = c(6,7),
-  stopped = c(7,1)
-)
-
-rownames(data) <- c("Upper", "Lower")
-data
-
-#a) Calculus of chi^2 test statistic "by hand"
-
-## First, calculus of the expected values
-rawLength <- dim(data)[1]
-colLength <- dim(data)[2]
-sumGlobal <- sum(data)
-effective_val <- matrix(0, 2,3) 
-for(i in 1:rawLength){
-  for( j in 1:colLength){
-    print(paste(i,j))
-    effective_val[i,j] <- sum(as.numeric(data[i,]))* sum(as.numeric(data[,j])) / sumGlobal
+  # Problem Set 2 answers
+  # Author: Victor Gomez
+  # Due date : 14/10/2024
+  
+  ###########################################
+  #         Question 1                      #
+  ###########################################
+  
+  #load data (by hand)
+  data <- data.frame(
+    not_stopped = c(14,7),
+    bribe_requested = c(6,7),
+    stopped = c(7,1)
+  )
+  
+  rownames(data) <- c("Upper", "Lower")
+  data
+  
+  #a) Calculus of chi^2 test statistic "by hand"
+  
+  ## First, calculus of the expected values
+  rawLength <- dim(data)[1]
+  colLength <- dim(data)[2]
+  sumGlobal <- sum(data)
+  effective_val <- matrix(0, 2,3) 
+  for(i in 1:rawLength){
+    for( j in 1:colLength){
+      print(paste(i,j))
+      effective_val[i,j] <- sum(as.numeric(data[i,]))* sum(as.numeric(data[,j])) / sumGlobal
+    }
   }
-}
-## Now, calculus of chi^2 statistic from effective values
-
-
-chi2 <-0
-for(i in 1:rawLength){
-  for( j in 1:colLength){
-    print(paste(i,j))
-    chi2 <- chi2 + ((data[i,j]-effective_val[i,j])^2)/(effective_val[i,j])
+  ## Now, calculus of chi^2 statistic from effective values
+  
+  
+  chi2 <-0
+  for(i in 1:rawLength){
+    for( j in 1:colLength){
+      print(paste(i,j))
+      chi2 <- chi2 + ((data[i,j]-effective_val[i,j])^2)/(effective_val[i,j])
+    }
   }
-}
-chi2
-
-#b) Calculus of p-value manually
-pval <- pchisq(chi2, df=(rawLength-1)*(colLength-1), lower.tail=F)
-
-#c) Calculus of standardized residuals z
-z <- matrix(0, 2,3) 
-for(i in 1:rawLength){
-  for( j in 1:colLength){
-    print(paste(i,j))
-    z[i,j] <- (data[i,j]-effective_val[i,j])/(sqrt(effective_val[i,j]*(1-sum(data[i,])/sumGlobal)*(1-sum(data[,j])/sumGlobal)))
+  chi2
+  
+  #b) Calculus of p-value manually
+  pval <- pchisq(chi2, df=(rawLength-1)*(colLength-1), lower.tail=F)
+  
+  #c) Calculus of standardized residuals z
+  z <- matrix(0, 2,3) 
+  for(i in 1:rawLength){
+    for( j in 1:colLength){
+      print(paste(i,j))
+      z[i,j] <- (data[i,j]-effective_val[i,j])/(sqrt(effective_val[i,j]*(1-sum(data[i,])/sumGlobal)*(1-sum(data[,j])/sumGlobal)))
+    }
   }
-}
-z
-
-###########################################
-#         Question 2                      #
-###########################################
-
-getwd()
-setwd("C:/data/ecole/___TCD/Michaelmas_Term/stats_I/TCD-StatsI_Fall2024/problemSets/PS02/my_answers")
-
-# load data from csv
-women<-read.csv("women.csv")
-
-#linear regression between reserved and water variables
-model <- lm(women$reserved~women$water)
-summary(model)
+  z
+  
+  ###########################################
+  #         Question 2                      #
+  ###########################################
+  
+  getwd()
+  setwd("C:/data/ecole/___TCD/Michaelmas_Term/stats_I/TCD-StatsI_Fall2024/problemSets/PS02/my_answers")
+  
+  # load data from csv
+  women<-read.csv("women.csv")
+  
+  #linear regression between reserved and water variables
+  model <- lm(women$reserved~women$water)
+  summary(model)
+  pdf("lm.pdf")
+  plot(women$reserved~women$water,xlab="Reserved", ylab="Water")
+  abline(model)
+  dev.off()
